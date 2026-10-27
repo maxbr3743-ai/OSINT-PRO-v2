@@ -1,0 +1,1342 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b14">
+<title>OSINT PRO ULTRA</title>
+
+<style>
+:root {
+  --bg: #070a12;
+  --panel: #101727;
+  --panel2: #151f32;
+  --text: #edf4ff;
+  --muted: #93a4c2;
+  --line: #283651;
+  --accent: #29d9ff;
+  --purple: #9b6dff;
+  --green: #50edb0;
+  --red: #ff617d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at top left, #102a4a, transparent 40%),
+    radial-gradient(ellipse at top right, #251342, transparent 35%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.container {
+  width: min(1450px, 100%);
+  margin: auto;
+  padding: 24px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+
+.logo {
+  width: 55px;
+  height: 55px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  font-size: 27px;
+  font-weight: 900;
+  color: #06111b;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  box-shadow: 0 0 35px #29d9ff30;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(21px, 3vw, 32px);
+  letter-spacing: -1px;
+}
+
+h1 span {
+  color: var(--accent);
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.btn {
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel2);
+  color: var(--text);
+  padding: 11px 14px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn.primary {
+  color: #04111b;
+  border: none;
+  background: linear-gradient(110deg, var(--accent), var(--green));
+}
+
+.btn.danger {
+  color: #ffc3cf;
+  border-color: #743348;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 18px;
+  margin: 25px 0;
+}
+
+.hero-main, .panel, .stat {
+  background: linear-gradient(145deg, #131d30ee, #0d1421ee);
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  box-shadow: 0 15px 45px #0003;
+}
+
+.hero-main {
+  padding: 30px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 900;
+}
+
+.hero h2 {
+  font-size: clamp(27px, 4vw, 43px);
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin: 15px 0;
+}
+
+.hero p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat strong {
+  color: var(--accent);
+  font-size: 27px;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.sidebar {
+  position: sticky;
+  top: 15px;
+}
+
+.panel {
+  padding: 21px;
+  margin-bottom: 18px;
+  min-width: 0;
+}
+
+.panel h3 {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #c3d1e8;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .5px;
+}
+
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #080e1a;
+  color: var(--text);
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.field small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mode {
+  text-align: left;
+  padding: 12px 10px;
+  border: 1px solid var(--line);
+  background: #0a1120;
+  color: var(--muted);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mode .emoji {
+  display: block;
+  font-size: 21px;
+  margin-bottom: 7px;
+}
+
+.mode.active {
+  border-color: var(--accent);
+  background: #123047;
+  color: white;
+}
+
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 13px 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.check input {
+  accent-color: var(--accent);
+  margin-top: 4px;
+}
+
+.notice {
+  padding: 13px;
+  border: 1px solid #24644c;
+  background: #0b241c;
+  color: #aaf4d1;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.warning {
+  border-color: #74551f;
+  background: #28200f;
+  color: #ffe6a0;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 17px;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.badge {
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+.query-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.query-card {
+  background: #0a1120;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 15px;
+  min-width: 0;
+}
+
+.query-card h4 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.query-card p {
+  color: var(--muted);
+  font-size: 12px;
+  min-height: 34px;
+  margin-bottom: 12px;
+}
+
+.query-card code {
+  display: block;
+  max-height: 100px;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  background: #050a12;
+  color: #c9d8f2;
+  border: 1px solid #202c42;
+  border-radius: 9px;
+  padding: 10px;
+  font-size: 11px;
+  margin-bottom: 12px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.mini {
+  font-size: 11px;
+  padding: 8px 10px;
+  border-radius: 9px;
+}
+
+.empty {
+  border: 1px dashed #35445e;
+  border-radius: 13px;
+  padding: 30px 15px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.history-item {
+  border: 1px solid var(--line);
+  background: #0a1120;
+  border-radius: 11px;
+  padding: 12px;
+  margin-bottom: 9px;
+}
+
+.history-item strong {
+  display: block;
+  font-size: 13px;
+}
+
+.history-item small {
+  display: block;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+  margin-top: 4px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.links a {
+  display: inline-block;
+  color: #bcefff;
+  border: 1px solid var(--line);
+  background: #0a1120;
+  padding: 8px 11px;
+  border-radius: 30px;
+  font-size: 12px;
+}
+
+footer {
+  padding: 25px 0 10px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #e7fbff;
+  color: #06121d;
+  padding: 13px 17px;
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 0 12px 35px #0005;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: .2s;
+  z-index: 100;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.light {
+  --bg: #edf2fa;
+  --panel: #ffffff;
+  --panel2: #e5ecf6;
+  --text: #111a2b;
+  --muted: #5f6e84;
+  --line: #cad5e5;
+  background: #edf2fa;
+}
+
+body.light .hero-main,
+body.light .panel,
+body.light .stat {
+  background: #fff;
+}
+
+body.light .field input,
+body.light .field select,
+body.light .field textarea,
+body.light .query-card,
+body.light .history-item,
+body.light .links a,
+body.light .mode {
+  background: #f7f9fd;
+  color: #111a2b;
+}
+
+@media(max-width: 950px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; }
+  .hero { grid-template-columns: 1fr; }
+}
+
+@media(max-width: 600px) {
+  .container { padding: 13px; }
+  .hero-main { padding: 21px; }
+  .panel { padding: 15px; }
+  .query-grid { grid-template-columns: 1fr; }
+  header { align-items: flex-start; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <div class="brand">
+    <div class="logo">⌕</div>
+    <div>
+      <h1>OSINT PRO <span>ULTRA</span></h1>
+      <div class="subtitle">CENTRAL AVANÇADA DE PESQUISAS PÚBLICAS</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="themeBtn">◐ Tema</button>
+    <button class="btn" id="exportBtn">⇩ Exportar JSON</button>
+    <button class="btn danger" id="clearBtn">Limpar sessão</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-main">
+    <div class="eyebrow">● OSINT WORKSPACE · ADVANCED</div>
+    <h2>Mais fontes.<br><span style="color:var(--accent)">Mais organização.</span></h2>
+    <p>
+      Prepare consultas para mecanismos de busca e serviços de fontes abertas.
+      Organize links, registre observações e exporte relatórios em uma interface
+      profissional e responsiva.
+    </p>
+    <div class="actions">
+      <button class="btn primary" onclick="document.querySelector('#target').focus()">
+        + Nova pesquisa
+      </button>
+      <button class="btn" onclick="document.querySelector('#sources').scrollIntoView({behavior:'smooth'})">
+        Ver fontes
+      </button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><strong id="statGenerated">0</strong><span>Consultas geradas</span></div>
+    <div class="stat"><strong id="statOpened">0</strong><span>Consultas abertas</span></div>
+    <div class="stat"><strong>10+</strong><span>Fontes disponíveis</span></div>
+    <div class="stat"><strong>JSON</strong><span>Exportação de relatório</span></div>
+  </div>
+</section>
+
+<div class="layout">
+
+<aside class="sidebar">
+  <section class="panel">
+    <h3>① Categoria de pesquisa</h3>
+
+    <div class="modes" id="modes">
+      <button class="mode active" data-mode="geral"><span class="emoji">🔎</span>Geral</button>
+      <button class="mode" data-mode="telefone"><span class="emoji">📱</span>Telefone</button>
+      <button class="mode" data-mode="email"><span class="emoji">✉️</span>E-mail / Gmail</button>
+      <button class="mode" data-mode="usuario"><span class="emoji">👤</span>Usuário</button>
+      <button class="mode" data-mode="nome"><span class="emoji">🧭</span>Nome / entidade</button>
+      <button class="mode" data-mode="dominio"><span class="emoji">🌐</span>Domínio</button>
+      <button class="mode" data-mode="empresa"><span class="emoji">🏢</span>Empresa</button>
+      <button class="mode" data-mode="ip"><span class="emoji">🖧</span>IP público</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>② Configurar pesquisa</h3>
+
+    <div class="field">
+      <label for="target">TERMO OU IDENTIFICADOR</label>
+      <input id="target" maxlength="300" placeholder="Digite o termo..." autocomplete="off">
+      <small>Não informe senhas, códigos de autenticação ou dados privados.</small>
+    </div>
+
+    <div class="field">
+      <label for="context">CONTEXTO OPCIONAL</label>
+      <input id="context" maxlength="150" placeholder="Ex.: empresa ou site público">
+    </div>
+
+    <div class="field">
+      <label for="region">REGIÃO</label>
+      <select id="region">
+        <option value="br">Brasil / português</option>
+        <option value="global">Global</option>
+        <option value="en">Inglês</option>
+      </select>
+    </div>
+
+    <label class="check">
+      <input type="checkbox" id="exact">
+      <span>Procurar o termo exato entre aspas.</span>
+    </label>
+
+    <label class="check">
+      <input type="checkbox" id="exclude">
+      <span>Excluir resultados de algumas redes sociais.</span>
+    </label>
+
+    <button class="btn primary" id="generateBtn" style="width:100%">
+      ⚡ GERAR CONSULTAS
+    </button>
+  </section>
+
+  <section class="panel">
+    <h3>🛡️ Utilização responsável</h3>
+    <div class="notice">
+      Use fontes públicas e respeite a legislação e a privacidade.
+      Os resultados precisam ser verificados manualmente.
+    </div>
+    <p class="subtitle" style="line-height:1.7;margin-top:12px">
+      O painel não invade contas, não descobre senhas, não acessa bases privadas
+      e não rastreia pessoas em tempo real.
+    </p>
+  </section>
+</aside>
+
+<main>
+  <section class="panel">
+    <div class="section-head">
+      <h2>Resultados preparados</h2>
+      <span class="badge" id="count">Aguardando pesquisa</span>
+    </div>
+
+    <div id="results" class="empty">
+      Selecione uma categoria, digite um termo e gere as consultas.
+    </div>
+
+    <div class="actions" style="margin-top:15px">
+      <button class="btn primary" id="openAllBtn">↗ Abrir consultas</button>
+      <button class="btn" id="copyAllBtn">⧉ Copiar todas</button>
+    </div>
+  </section>
+
+  <section class="panel" id="sources">
+    <div class="section-head">
+      <h2>Fontes abertas</h2>
+      <span class="badge">Links externos</span>
+    </div>
+
+    <div class="links">
+      <a href="https://www.google.com/" target="_blank" rel="noopener">Google</a>
+      <a href="https://www.bing.com/" target="_blank" rel="noopener">Bing</a>
+      <a href="https://duckduckgo.com/" target="_blank" rel="noopener">DuckDuckGo</a>
+      <a href="https://search.brave.com/" target="_blank" rel="noopener">Brave Search</a>
+      <a href="https://www.google.com/advanced_search" target="_blank" rel="noopener">Pesquisa avançada</a>
+      <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.reddit.com/" target="_blank" rel="noopener">Reddit</a>
+      <a href="https://news.google.com/" target="_blank" rel="noopener">Google Notícias</a>
+      <a href="https://crt.sh/" target="_blank" rel="noopener">Certificados TLS</a>
+      <a href="https://lookup.icann.org/" target="_blank" rel="noopener">ICANN Lookup</a>
+      <a href="https://www.iana.org/" target="_blank" rel="noopener">IANA</a>
+      <a href="https://www.virustotal.com/" target="_blank" rel="noopener">VirusTotal</a>
+      <a href="https://urlscan.io/" target="_blank" rel="noopener">urlscan.io</a>
+      <a href="https://www.shodan.io/" target="_blank" rel="noopener">Shodan</a>
+      <a href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Have I Been Pwned</a>
+    </div>
+
+    <p class="subtitle" style="margin-top:14px">
+      Os serviços têm suas próprias regras, limitações e condições de uso.
+      Use serviços de exposição de dados apenas para verificar suas próprias
+      contas ou quando houver autorização.
+    </p>
+  </section>
+
+  <section class="panel">
+    <div class="section-head">
+      <h2>Histórico da sessão</h2>
+      <span class="badge">Temporário</span>
+    </div>
+    <div id="history" class="empty">Nenhuma consulta aberta ainda.</div>
+  </section>
+
+  <section class="panel">
+    <div class="section-head">
+      <h2>Anotações</h2>
+      <span class="badge">Relatório</span>
+    </div>
+
+    <div class="field">
+      <label for="notes">NOTAS DE PESQUISA</label>
+      <textarea id="notes" placeholder="Registre fontes, datas, URLs públicas e observações verificáveis."></textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="downloadNotesBtn">Baixar notas TXT</button>
+      <button class="btn" id="clearNotesBtn">Limpar notas</button>
+    </div>
+  </section>
+</main>
+</div>
+
+<footer>
+  OSINT PRO ULTRA · Central de pesquisas em fontes abertas.<br>
+  Os links são preparados pelo navegador; o sistema não valida nem confirma os resultados.
+</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
+
+const state = {
+  mode: "geral",
+  queries: [],
+  history: [],
+  opened: 0,
+  lastSearch: null
+};
+
+const engines = [
+  {
+    name: "Google",
+    url: q => "https://www.google.com/search?q=" + encodeURIComponent(q)
+  },
+  {
+    name: "Bing",
+    url: q => "https://www.bing.com/search?q=" + encodeURIComponent(q)
+  },
+  {
+    name: "DuckDuckGo",
+    url: q => "https://duckduckgo.com/?q=" + encodeURIComponent(q)
+  },
+  {
+    name: "Brave Search",
+    url: q => "https://search.brave.com/search?q=" + encodeURIComponent(q)
+  }
+];
+
+const socialSites = [
+  "site:instagram.com",
+  "site:tiktok.com",
+  "site:facebook.com",
+  "site:x.com",
+  "site:linkedin.com",
+  "site:github.com",
+  "site:reddit.com"
+];
+
+function toast(message) {
+  const element = $("#toast");
+  element.textContent = message;
+  element.classList.add("show");
+
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => {
+    element.classList.remove("show");
+  }, 2400);
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function normalize(value) {
+  return value.trim().replace(/\s+/g, " ");
+}
+
+function makeTerm(value) {
+  value = normalize(value);
+
+  if ($("#exact").checked) {
+    return '"' + value.replace(/"/g, "") + '"';
+  }
+
+  return value;
+}
+
+function addQuery(list, title, description, query) {
+  query = normalize(query);
+
+  if (!query) return;
+
+  list.push({
+    title,
+    description,
+    query
+  });
+}
+
+function buildQueries(term, mode, context, region) {
+  const list = [];
+  const quoted = makeTerm(term);
+  const extra = context ? " " + makeTerm(context) : "";
+
+  addQuery(list, "Google — busca geral",
+    "Pesquise menções públicas na web.",
+    quoted + extra);
+
+  addQuery(list, "Bing — busca geral",
+    "Compare resultados de outro mecanismo.",
+    quoted + extra);
+
+  addQuery(list, "DuckDuckGo",
+    "Faça uma consulta alternativa.",
+    quoted + extra);
+
+  addQuery(list, "Brave Search",
+    "Pesquise páginas indexadas publicamente.",
+    quoted + extra);
+
+  if (mode === "telefone") {
+    const digits = term.replace(/\D/g, "");
+
+    addQuery(list, "Número exato",
+      "Procura páginas que mencionem o número.",
+      '"' + term + '"' + extra);
+
+    if (digits && digits !== term) {
+      addQuery(list, "Número sem formatação",
+        "Procura a sequência numérica sem espaços ou símbolos.",
+        '"' + digits + '"');
+    }
+
+    addQuery(list, "Número em documentos",
+      "Procura referências em arquivos indexados.",
+      '"' + term + '" (filetype:pdf OR filetype:doc OR filetype:xls)');
+
+    addQuery(list, "Número em páginas institucionais",
+      "Pesquisa páginas públicas de instituições.",
+      '"' + term + '" (site:gov.br OR site:edu.br OR site:org.br)');
+
+    addQuery(list, "Número e notícias",
+      "Procura menções em notícias públicas.",
+      '"' + term + '" (notícia OR comunicado OR contato)');
+
+    addQuery(list, "Número e contexto",
+      "Combina o número com o contexto fornecido.",
+      '"' + term + '"' + extra);
+  }
+
+  if (mode === "email") {
+    const email = term.toLowerCase();
+    const domain = email.includes("@") ? email.split("@").pop() : "";
+
+    addQuery(list, "E-mail exato",
+      "Procura menções públicas ao endereço.",
+      '"' + email + '"' + extra);
+
+    addQuery(list, "E-mail em documentos",
+      "Procura arquivos indexados publicamente.",
+      '"' + email + '" (filetype:pdf OR filetype:doc OR filetype:xls OR filetype:csv)');
+
+    addQuery(list, "E-mail em páginas institucionais",
+      "Procura menções em páginas institucionais.",
+      '"' + email + '" (site:gov.br OR site:edu.br OR site:org.br)');
+
+    addQuery(list, "E-mail em perfis profissionais",
+      "Procura referências públicas em páginas profissionais.",
+      '"' + email + '" (site:linkedin.com OR site:github.com)');
+
+    if (domain && domain.includes(".")) {
+      addQuery(list, "Domínio do endereço",
+        "Pesquisa o domínio público associado ao endereço.",
+        '"' + domain + '"');
+    }
+
+    addQuery(list, "Gmail e menções públicas",
+      "Pesquisa menções públicas; não abre nem acessa a conta.",
+      '"' + email + '" site:google.com');
+
+    addQuery(list, "E-mail e contexto",
+      "Combina o endereço com o contexto fornecido.",
+      '"' + email + '"' + extra);
+  }
+
+  if (mode === "usuario") {
+    const username = term.replace(/^@/, "");
+
+    addQuery(list, "Usuário exato",
+      "Pesquisa o identificador entre aspas.",
+      '"' + username + '"' + extra);
+
+    addQuery(list, "Instagram",
+      "Busca páginas públicas indexadas.",
+      '"' + username + '" site:instagram.com');
+
+    addQuery(list, "TikTok",
+      "Busca páginas públicas indexadas.",
+      '"' + username + '" site:tiktok.com');
+
+    addQuery(list, "Facebook",
+      "Busca páginas públicas indexadas.",
+      '"' + username + '" site:facebook.com');
+
+    addQuery(list, "X / Twitter",
+      "Busca páginas públicas indexadas.",
+      '"' + username + '" (site:x.com OR site:twitter.com)');
+
+    addQuery(list, "GitHub",
+      "Busca perfis e projetos públicos.",
+      '"' + username + '" site:github.com');
+
+    addQuery(list, "Reddit",
+      "Busca páginas e publicações públicas.",
+      '"' + username + '" site:reddit.com');
+
+    addQuery(list, "LinkedIn",
+      "Busca páginas profissionais públicas.",
+      '"' + username + '" site:linkedin.com');
+  }
+
+  if (mode === "nome") {
+    addQuery(list, "Nome exato",
+      "Pesquisa correspondências do nome.",
+      '"' + term + '"' + extra);
+
+    addQuery(list, "Notícias",
+      "Procura notícias e menções públicas.",
+      '"' + term + '" notícias');
+
+    addQuery(list, "Documentos públicos",
+      "Procura documentos indexados.",
+      '"' + term + '" (filetype:pdf OR filetype:doc OR filetype:xls)');
+
+    addQuery(list, "Páginas institucionais",
+      "Pesquisa em páginas governamentais.",
+      '"' + term + '" site:gov.br');
+
+    addQuery(list, "Perfis profissionais",
+      "Pesquisa páginas profissionais públicas.",
+      '"' + term + '" site:linkedin.com');
+
+    addQuery(list, "Repositórios públicos",
+      "Pesquisa projetos e perfis públicos.",
+      '"' + term + '" site:github.com');
+  }
+
+  if (mode === "dominio") {
+    const domain = term
+      .replace(/^https?:\/\//i, "")
+      .replace(/^www\./i, "")
+      .split("/")[0];
+
+    addQuery(list, "Domínio exato",
+      "Procura menções ao domínio.",
+      '"' + domain + '"');
+
+    addQuery(list, "Páginas indexadas",
+      "Procura páginas públicas dentro do domínio.",
+      "site:" + domain);
+
+    addQuery(list, "Arquivos públicos",
+      "Procura documentos indexados no site.",
+      "site:" + domain + " (filetype:pdf OR filetype:doc OR filetype:xls)");
+
+    addQuery(list, "Certificados públicos",
+      "Atalho para pesquisar certificados de domínio.",
+      '"' + domain + '" site:crt.sh');
+
+    addQuery(list, "Registro de domínio",
+      "Atalho para pesquisar informações de registro.",
+      '"' + domain + '" ICANN WHOIS');
+
+    addQuery(list, "Reputação de domínio",
+      "Atalho para serviços de reputação e análise.",
+      '"' + domain + '" VirusTotal urlscan');
+  }
+
+  if (mode === "empresa") {
+    addQuery(list, "Empresa — nome exato",
+      "Procura referências públicas à empresa.",
+      '"' + term + '"' + extra);
+
+    addQuery(list, "Site institucional",
+      "Procura páginas associadas à empresa.",
+      '"' + term + '" (site:com.br OR site:com OR site:org.br)');
+
+    addQuery(list, "Notícias da empresa",
+      "Procura notícias públicas.",
+      '"' + term + '" notícias');
+
+    addQuery(list, "Documentos públicos",
+      "Procura documentos indexados.",
+      '"' + term + '" (filetype:pdf OR filetype:doc)');
+
+    addQuery(list, "LinkedIn",
+      "Procura páginas profissionais públicas.",
+      '"' + term + '" site:linkedin.com/company');
+
+    addQuery(list, "GitHub",
+      "Procura organizações e projetos públicos.",
+      '"' + term + '" site:github.com');
+  }
+
+  if (mode === "ip") {
+    addQuery(list, "IP exato",
+      "Procura menções públicas do endereço.",
+      '"' + term + '"');
+
+    addQuery(list, "Reputação pública",
+      "Atalho para pesquisar reputação e indicadores.",
+      '"' + term + '" (VirusTotal OR AbuseIPDB OR GreyNoise)');
+
+    addQuery(list, "Documentação pública",
+      "Procura referências em documentos indexados.",
+      '"' + term + '" (filetype:pdf OR filetype:txt)');
+
+    addQuery(list, "Shodan",
+      "Atalho para informações públicas de rede.",
+      '"' + term + '" site:shodan.io');
+
+    addQuery(list, "Contexto adicional",
+      "Combina o IP com o contexto fornecido.",
+      '"' + term + '"' + extra);
+  }
+
+  if (mode === "geral") {
+    addQuery(list, "Correspondência exata",
+      "Procura o termo entre aspas.",
+      '"' + term + '"' + extra);
+
+    addQuery(list, "Notícias",
+      "Procura menções em notícias públicas.",
+      quoted + " notícias" + extra);
+
+    addQuery(list, "Documentos indexados",
+      "Procura documentos públicos.",
+      quoted + " (filetype:pdf OR filetype:doc OR filetype:xls)");
+
+    addQuery(list, "Redes sociais públicas",
+      "Pesquisa referências em páginas públicas.",
+      quoted + " (" + socialSites.join(" OR ") + ")");
+
+    addQuery(list, "Páginas institucionais",
+      "Pesquisa em páginas institucionais públicas.",
+      quoted + " (site:gov.br OR site:edu.br OR site:org.br)");
+
+    addQuery(list, "Repositórios públicos",
+      "Pesquisa em projetos públicos.",
+      quoted + " site:github.com");
+  }
+
+  if ($("#exclude").checked) {
+    const exclusion =
+      " -site:instagram.com -site:tiktok.com -site:facebook.com -site:x.com";
+
+    list.forEach(item => item.query += exclusion);
+  }
+
+  if (region === "en") {
+    list.forEach(item => item.query += " language:en");
+  }
+
+  return list;
+}
+
+function renderQueries() {
+  const root = $("#results");
+
+  if (!state.queries.length) {
+    root.className = "empty";
+    root.textContent = "Nenhuma consulta preparada.";
+    $("#count").textContent = "Aguardando pesquisa";
+    return;
+  }
+
+  root.className = "query-grid";
+
+  root.innerHTML = state.queries.map((item, index) => `
+    <article class="query-card">
+      <h4>⌕ ${escapeHTML(item.title)}</h4>
+      <p>${escapeHTML(item.description)}</p>
+      <code>${escapeHTML(item.query)}</code>
+      <div class="card-actions">
+        <button class="btn primary mini" data-open="${index}">↗ Pesquisar</button>
+        <button class="btn mini" data-copy="${index}">⧉ Copiar</button>
+      </div>
+    </article>
+  `).join("");
+
+  root.querySelectorAll("[data-open]").forEach(button => {
+    button.addEventListener("click", () => openQuery(Number(button.dataset.open)));
+  });
+
+  root.querySelectorAll("[data-copy]").forEach(button => {
+    button.addEventListener("click", () => {
+      const item = state.queries[Number(button.dataset.copy)];
+      copyText(item.query);
+    });
+  });
+
+  $("#count").textContent = state.queries.length + " consultas";
+  $("#statGenerated").textContent = state.queries.length;
+}
+
+function openQuery(index) {
+  const item = state.queries[index];
+  if (!item) return;
+
+  const engine = engines[index % engines.length];
+  const url = engine.url(item.query);
+
+  const opened = window.open(url, "_blank", "noopener,noreferrer");
+
+  if (!opened) {
+    toast("O navegador bloqueou a nova aba. Use Copiar.");
+    return;
+  }
+
+  state.opened++;
+  $("#statOpened").textContent = state.opened;
+
+  state.history.unshift({
+    title: item.title,
+    query: item.query,
+    time: new Date().toLocaleString("pt-BR")
+  });
+
+  state.history = state.history.slice(0, 40);
+  renderHistory();
+}
+
+function renderHistory() {
+  const root = $("#history");
+
+  if (!state.history.length) {
+    root.className = "empty";
+    root.textContent = "Nenhuma consulta aberta ainda.";
+    return;
+  }
+
+  root.className = "";
+
+  root.innerHTML = state.history.map((item, index) => `
+    <div class="history-item">
+      <strong>${escapeHTML(item.title)}</strong>
+      <small>${escapeHTML(item.query)}</small>
+      <small>${escapeHTML(item.time)}</small>
+      <button class="btn mini" data-history-copy="${index}" style="margin-top:9px">
+        Copiar consulta
+      </button>
+    </div>
+  `).join("");
+
+  root.querySelectorAll("[data-history-copy]").forEach(button => {
+    button.addEventListener("click", () => {
+      copyText(state.history[Number(button.dataset.historyCopy)].query);
+    });
+  });
+}
+
+async function copyText(value) {
+  try {
+    await navigator.clipboard.writeText(value);
+    toast("Copiado com sucesso!");
+  } catch (error) {
+    const textarea = document.createElement("textarea");
+    textarea.value = value;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    textarea.remove();
+    toast("Texto copiado.");
+  }
+}
+
+function downloadFile(filename, content, type) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$("#modes").addEventListener("click", event => {
+  const button = event.target.closest("[data-mode]");
+  if (!button) return;
+
+  state.mode = button.dataset.mode;
+
+  $$(".mode").forEach(item => {
+    item.classList.toggle("active", item === button);
+  });
+
+  const placeholders = {
+    geral: "Ex.: termo para pesquisar",
+    telefone: "Ex.: +55 11 99999-9999",
+    email: "Ex.: contato@gmail.com",
+    usuario: "Ex.: nomeusuario",
+    nome: "Ex.: nome de uma entidade",
+    dominio: "Ex.: exemplo.com.br",
+    empresa: "Ex.: nome da empresa",
+    ip: "Ex.: endereço IP público"
+  };
+
+  $("#target").placeholder = placeholders[state.mode];
+  $("#target").focus();
+});
+
+$("#generateBtn").addEventListener("click", () => {
+  const term = normalize($("#target").value);
+  const context = normalize($("#context").value);
+
+  if (!term) {
+    toast("Digite um termo para pesquisar.");
+    $("#target").focus();
+    return;
+  }
+
+  if (term.length > 300) {
+    toast("O termo ultrapassa o limite.");
+    return;
+  }
+
+  state.queries = buildQueries(
+    term,
+    state.mode,
+    context,
+    $("#region").value
+  );
+
+  state.lastSearch = {
+    term,
+    mode: state.mode,
+    context,
+    region: $("#region").value,
+    date: new Date().toISOString()
+  };
+
+  renderQueries();
+  toast(state.queries.length + " consultas preparadas.");
+});
+
+$("#openAllBtn").addEventListener("click", () => {
+  if (!state.queries.length) {
+    toast("Gere as consultas primeiro.");
+    return;
+  }
+
+  const confirmed = confirm(
+    "Abrir " + state.queries.length +
+    " pesquisas em novas abas? O navegador pode bloquear algumas."
+  );
+
+  if (!confirmed) return;
+
+  state.queries.forEach((item, index) => {
+    setTimeout(() => openQuery(index), index * 400);
+  });
+});
+
+$("#copyAllBtn").addEventListener("click", () => {
+  if (!state.queries.length) {
+    toast("Gere as consultas primeiro.");
+    return;
+  }
+
+  const text = state.queries.map(item =>
+    item.title + "\n" + item.query
+  ).join("\n\n");
+
+  copyText(text);
+});
+
+$("#exportBtn").addEventListener("click", () => {
+  const report = {
+    product: "OSINT PRO ULTRA",
+    exportedAt: new Date().toISOString(),
+    disclaimer: "Consultas para fontes públicas; resultados não verificados.",
+    lastSearch: state.lastSearch,
+    queries: state.queries,
+    history: state.history,
+    notes: $("#notes").value
+  };
+
+  downloadFile(
+    "osint-pro-ultra-relatorio.json",
+    JSON.stringify(report, null, 2),
+    "application/json"
+  );
+
+  toast("Relatório preparado.");
+});
+
+$("#downloadNotesBtn").addEventListener("click", () => {
+  downloadFile(
+    "osint-pro-ultra-notas.txt",
+    $("#notes").value || "Nenhuma anotação registrada.",
+    "text/plain;charset=utf-8"
+  );
+
+  toast("Arquivo de notas preparado.");
+});
+
+$("#clearNotesBtn").addEventListener("click", () => {
+  if (!confirm("Deseja limpar as anotações?")) return;
+  $("#notes").value = "";
+  toast("Anotações limpas.");
+});
+
+$("#clearBtn").addEventListener("click", () => {
+  if (!confirm("Deseja limpar consultas e histórico desta sessão?")) return;
+
+  state.queries = [];
+  state.history = [];
+  state.opened = 0;
+  state.lastSearch = null;
+
+  $("#statGenerated").textContent = "0";
+  $("#statOpened").textContent = "0";
+
+  renderQueries();
+  renderHistory();
+
+  toast("Sessão limpa.");
+});
+
+$("#themeBtn").addEventListener("click", () => {
+  document.body.classList.toggle("light");
+});
+
+$("#target").addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    $("#generateBtn").click();
+  }
+});
+
+renderQueries();
+renderHistory();
+</script>
+</body>
+</html>
